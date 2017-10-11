@@ -7,24 +7,39 @@ names(scores)<-c("Time","Date","Team1","Home1","Score1","Team2","Home2","Score2"
 names(teams)<-c("Label","Team")
 
 #Use Random Walker
-
-if(scores$Score1[i]>scores$Score2[i]){
-  nw++
-} else{
-  nl++
-}
-
+nw=rep(0, length(teams$Team))
+nl=rep(0, length(teams$Team))
 p = .75
 A=matrix(rep(0,length(teams$Team)^2),nrow=length(teams$Team))
-b=rep(1,length(teams$Team))
-diag(A)=rep((-(1-p)nw-pnl),legnth(diag(A)))
+
+
+for( i in 1:length(scores$Team1)){
+  if(scores$Score1[i]>scores$Score2[i]){
+    A[scores$Team1[i],scores$Team1[i]]=A[scores$Team1[i],scores$Team1[i]]-(1-p)
+    A[scores$Team2[i],scores$Team2[i]]=A[scores$Team2[i],scores$Team2[i]]-(p)
+    A[scores$Team1[i],scores$Team2[i]]=A[scores$Team1[i],scores$Team2[i]]+p
+    A[scores$Team2[i],scores$Team1[i]]=A[scores$Team2[i],scores$Team1[i]]+(1-p)
+
+  } else{
+    A[scores$Team2[i],scores$Team2[i]]=A[scores$Team2[i],scores$Team2[i]]-(1-p)
+    A[scores$Team1[i],scores$Team1[i]]=A[scores$Team1[i],scores$Team1[i]]-(p)
+    A[scores$Team2[i],scores$Team1[i]]=A[scores$Team2[i],scores$Team1[i]]+p
+    A[scores$Team1[i],scores$Team2[i]]=A[scores$Team1[i],scores$Team2[i]]+(1-p)
+
+  }
+}
 
 
 
-e<- eigen(D)
+
+e<- eigen(A)
 library(tidyverse)
 near(e$values,0)
 
-e$vectors[,4]
-e$vectors[,4]/sum(e$vectors[,4])*4
+ranke<-e$vectors[,length(teams$Team)]
+ranke <- ranke/sum(ranke)*length(ranke)
 
+rankedteams <- teams %>% mutate(rating=Re(ranke)) %>% arrange(desc(rating)) %>% mutate(ranking = row_number())
+
+
+#working, need to throw out tournement
