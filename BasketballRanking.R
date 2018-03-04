@@ -24,16 +24,24 @@ for(i in seq(1,(2*MaxMOV-1))) {
   
 }
 Expecteds<-solve(MOVChain,rhs)
-#pulling data from Massey Site
+
+
+
+# #pulling data from Kaggle CSV
 allscores <- read.csv("~/Senior/Ranking Project/Kaggle Data/RegularSeasoncompactResults.csv", header=FALSE)
 teams <- read.csv("~/Senior/Ranking Project/Kaggle Data/TeamCodes.csv", header=TRUE)
 names(allscores)<-c("Year","Day","Team1","Home1","Score1","Team2","Score2","Home2", "OT")
-
-#subset
-scores<-subset(scores, Year > 2016)
-
-
 names(teams)<-c("Label","Team")
+scores<-subset(allscores, Year > 2016)
+
+
+# #pulling data from Massey Ratings Site
+# scores <- read.csv("https://www.masseyratings.com/scores.php?s=298892&sub=11590&all=1&mode=3&format=1", header=FALSE)
+# teams <- read.csv("https://www.masseyratings.com/scores.php?s=298892&sub=11590&all=1&mode=3&format=2", header=TRUE)
+# names(scores)<-c("Year","Day","Team1","Home1","Score1","Team2","Home2","Score2")
+# names(teams)<-c("Label","Team")
+
+
 
 A=matrix(rep(0,length(teams$Team)^2),nrow=length(teams$Team))
 b=rep(1,length(teams$Team))
