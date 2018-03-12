@@ -102,11 +102,11 @@ shares <- c(0,Expecteds, 1)
 ```
 ```{r}
 
-MOV=diag(rep(0,length(indices)))
-for( i in 1:(length(indices)-1)){
-  for(j in (i+1):length(indices)){
-    MOV[i,j]= Predict_Margin_Meyer(A_unnormed , c(0,Expecteds,1), indices[j], indices[i], e)
-    cat(as.character(teams$Team[indices[i]])," ", as.character(teams$Team[indices[j]]), ":", MOV[i,j], "\n")
+MOV=diag(rep(0,length(match(indices, teams$Label))))
+for( i in 1:(length(match(indices, teams$Label))-1)){
+  for(j in (i+1):length(match(indices, teams$Label))){
+    MOV[i,j]= Predict_Margin_Meyer(A_unnormed , c(0,Expecteds,1), match(indices[j], teams$Label), match(indices[i], teams$Label), e)
+    cat(as.character(teams$Team[match(indices[i], teams$Label)])," ", as.character(teams$Team[match(indices[j], teams$Label)]), ":", MOV[i,j], "\n")
     MOV[j,i]=-MOV[i,j]
   }
 }
