@@ -1,0 +1,365 @@
+"Ranking","Team","Rating"
+1,"Abilene Chr",0
+2,"Air Force",0
+3,"Akron",0
+4,"Alabama",0
+5,"Alabama A&M",0
+6,"Alabama St",0
+7,"Albany NY",0
+8,"Alcorn St",0
+9,"Alliant Intl",0
+10,"American Univ",0
+11,"Appalachian St",0
+12,"Arizona",0
+13,"Arizona St",0
+14,"Ark Little Rock",0
+15,"Ark Pine Bluff",0
+16,"Arkansas",0
+17,"Arkansas St",0
+18,"Armstrong St",0
+19,"Army",0
+20,"Auburn",0
+21,"Augusta",0
+22,"Austin Peay",0
+23,"Ball St",0
+24,"Baylor",0
+25,"Belmont",0
+26,"Bethune-Cookman",0
+27,"Binghamton",0
+28,"Birmingham So",0
+29,"Boise St",0
+30,"Boston College",0
+31,"Boston Univ",0
+32,"Bowling Green",0
+33,"Bradley",0
+34,"Brooklyn",0
+35,"Brown",0
+36,"Bryant",0
+37,"Bucknell",0
+38,"Buffalo",0
+39,"Butler",0
+40,"BYU",0
+41,"C Michigan",0
+42,"Cal Poly SLO",0
+43,"California",0
+44,"Campbell",0
+45,"Canisius",0
+46,"Cent Arkansas",0
+47,"Centenary",0
+48,"Central Conn",0
+49,"Charleston So",0
+50,"Charlotte",0
+51,"Chattanooga",0
+52,"Chicago St",0
+53,"Cincinnati",0
+54,"Citadel",0
+55,"Clemson",0
+56,"Cleveland St",0
+57,"Coastal Car",0
+58,"Col Charleston",0
+59,"Colgate",0
+60,"Colorado",0
+61,"Colorado St",0
+62,"Columbia",0
+63,"Connecticut",0
+64,"Coppin St",0
+65,"Cornell",0
+66,"Creighton",0
+67,"CS Bakersfield",0
+68,"CS Fullerton",0
+69,"CS Northridge",0
+70,"CS Sacramento",0
+71,"Dartmouth",0
+72,"Davidson",0
+73,"Dayton",0
+74,"Delaware",0
+75,"Delaware St",0
+76,"Denver",0
+77,"DePaul",0
+78,"Detroit",0
+79,"Drake",0
+80,"Drexel",0
+81,"Duke",0
+82,"Duquesne",0
+83,"E Illinois",0
+84,"E Kentucky",0
+85,"E Michigan",0
+86,"E Washington",0
+87,"East Carolina",0
+88,"Edwardsville",0
+89,"Elon",0
+90,"ETSU",0
+91,"Evansville",0
+92,"F Dickinson",0
+93,"Fairfield",0
+94,"FL Atlantic",0
+95,"FL Gulf Coast",0
+96,"Florida",0
+97,"Florida A&M",0
+98,"Florida Intl",0
+99,"Florida St",0
+100,"Fordham",0
+101,"Fresno St",0
+102,"Furman",0
+103,"G Washington",0
+104,"Ga Southern",0
+105,"Gardner Webb",0
+106,"George Mason",0
+107,"Georgetown",0
+108,"Georgia",0
+109,"Georgia St",0
+110,"Georgia Tech",0
+111,"Gonzaga",0
+112,"Grambling",0
+113,"Grand Canyon",0
+114,"Hampton",0
+115,"Hardin-Simmons",0
+116,"Hartford",0
+117,"Harvard",0
+118,"Hawaii",0
+119,"High Point",0
+120,"Hofstra",0
+121,"Holy Cross",0
+122,"Houston",0
+123,"Houston Bap",0
+124,"Howard",0
+125,"Idaho",0
+126,"Idaho St",0
+127,"IL Chicago",0
+128,"Illinois",0
+129,"Illinois St",0
+130,"Incarnate Word",0
+131,"Indiana",0
+132,"Indiana St",0
+133,"Iona",0
+134,"Iowa",0
+135,"Iowa St",0
+136,"IPFW",0
+137,"IUPUI",0
+138,"Jackson St",0
+139,"Jacksonville",0
+140,"Jacksonville St",0
+141,"James Madison",0
+142,"Kansas",0
+143,"Kansas St",0
+144,"Kennesaw",0
+145,"Kent",0
+146,"Kentucky",0
+147,"La Salle",0
+148,"Lafayette",0
+149,"Lamar",0
+150,"Lehigh",0
+151,"Liberty",0
+152,"Lipscomb",0
+153,"Long Beach St",0
+154,"Long Island",0
+155,"Longwood",0
+156,"Louisiana Tech",0
+157,"Louisville",0
+158,"Loy Marymount",0
+159,"Loyola MD",0
+160,"Loyola-Chicago",0
+161,"LSU",0
+162,"MA Lowell",0
+163,"Maine",0
+164,"Manhattan",0
+165,"Marist",0
+166,"Marquette",0
+167,"Marshall",0
+168,"Maryland",0
+169,"Massachusetts",0
+170,"McNeese St",0
+171,"MD E Shore",0
+172,"Memphis",0
+173,"Mercer",0
+174,"Miami FL",0
+175,"Miami OH",0
+176,"Michigan",0
+177,"Michigan St",0
+178,"Minnesota",0
+179,"Mississippi",0
+180,"Mississippi St",0
+181,"Missouri",0
+182,"Missouri KC",0
+183,"Missouri St",0
+184,"Monmouth NJ",0
+185,"Montana",0
+186,"Montana St",0
+187,"Morehead St",0
+188,"Morgan St",0
+189,"Morris Brown",0
+190,"MS Valley St",0
+191,"Mt St Mary's",0
+192,"MTSU",0
+193,"Murray St",0
+194,"N Colorado",0
+195,"N Dakota St",0
+196,"N Illinois",0
+197,"N Kentucky",0
+198,"Navy",0
+199,"NC A&T",0
+200,"NC Central",0
+201,"NC State",0
+202,"NE Illinois",0
+203,"NE Omaha",0
+204,"Nebraska",0
+205,"Nevada",0
+206,"New Hampshire",0
+207,"New Mexico",0
+208,"New Mexico St",0
+209,"New Orleans",0
+210,"Niagara",0
+211,"Nicholls St",0
+212,"NJIT",0
+213,"Norfolk St",0
+214,"North Carolina",0
+215,"North Dakota",0
+216,"North Florida",0
+217,"North Texas",0
+218,"Northeastern",0
+219,"Northern Arizona",0
+220,"Northern Iowa",0
+221,"Northwestern",0
+222,"Northwestern LA",0
+223,"Notre Dame",0
+224,"Oakland",0
+225,"Ohio",0
+226,"Ohio St",0
+227,"Okla City",0
+228,"Oklahoma",0
+229,"Oklahoma St",0
+230,"Old Dominion",0
+231,"Oral Roberts",0
+232,"Oregon",0
+233,"Oregon St",0
+234,"Pacific",0
+235,"Penn",0
+236,"Penn St",0
+237,"Pepperdine",0
+238,"Pittsburgh",0
+239,"Portland",0
+240,"Portland St",0
+241,"Prairie View",0
+242,"Presbyterian",0
+243,"Princeton",0
+244,"Providence",0
+245,"Purdue",0
+246,"Quinnipiac",0
+247,"Radford",0
+248,"Rhode Island",0
+249,"Rice",0
+250,"Richmond",0
+251,"Rider",0
+252,"Robert Morris",0
+253,"Rutgers",0
+254,"S Carolina St",0
+255,"S Dakota St",0
+256,"S Illinois",0
+257,"Sacred Heart",0
+258,"Sam Houston St",0
+259,"Samford",0
+260,"San Diego",0
+261,"San Diego St",0
+262,"San Francisco",0
+263,"San Jose St",0
+264,"Santa Barbara",0
+265,"Santa Clara",0
+266,"Savannah St",0
+267,"SC Upstate",0
+268,"SE Louisiana",0
+269,"SE Missouri St",0
+270,"Seattle",0
+271,"Seton Hall",0
+272,"SF Austin",0
+273,"Siena",0
+274,"SMU",0
+275,"South Alabama",0
+276,"South Carolina",0
+277,"South Dakota",0
+278,"South Florida",0
+279,"Southern Miss",0
+280,"Southern Univ",0
+281,"Southern Utah",0
+282,"St Bonaventure",0
+283,"St Francis NY",0
+284,"St Francis PA",0
+285,"St John's",0
+286,"St Joseph's PA",0
+287,"St Louis",0
+288,"St Mary's CA",0
+289,"St Peter's",0
+290,"Stanford",0
+291,"Stetson",0
+292,"Stony Brook",0
+293,"Syracuse",0
+294,"TAM C. Christi",0
+295,"TCU",0
+296,"Temple",0
+297,"Tennessee",0
+298,"Tennessee St",0
+299,"Tennessee Tech",0
+300,"Texas",0
+301,"Texas A&M",0
+302,"Texas St",0
+303,"Texas Tech",0
+304,"TN Martin",0
+305,"Toledo",0
+306,"Towson",0
+307,"Troy",0
+308,"Tulane",0
+309,"Tulsa",0
+310,"UTRGV",0
+311,"TX Southern",0
+312,"UAB",0
+313,"UC Davis",0
+314,"UC Irvine",0
+315,"UC Riverside",0
+316,"UCF",0
+317,"UCLA",0
+318,"ULL",0
+319,"ULM",0
+320,"UMBC",0
+321,"UNC Asheville",0
+322,"UNC Greensboro",0
+323,"UNC Wilmington",0
+324,"UNLV",0
+325,"USC",0
+326,"UT Arlington",0
+327,"UT San Antonio",0
+328,"Utah",0
+329,"Utah St",0
+330,"Utah Valley",0
+331,"UTEP",0
+332,"Utica",0
+333,"VA Commonwealth",0
+334,"Valparaiso",0
+335,"Vanderbilt",0
+336,"Vermont",0
+337,"Villanova",0
+338,"Virginia",0
+339,"Virginia Tech",0
+340,"VMI",0
+341,"W Carolina",0
+342,"W Illinois",0
+343,"WKU",0
+344,"W Michigan",0
+345,"W Salem St",0
+346,"W Texas A&M",0
+347,"Wagner",0
+348,"Wake Forest",0
+349,"Washington",0
+350,"Washington St",0
+351,"Weber St",0
+352,"West Virginia",0
+353,"WI Green Bay",0
+354,"WI Milwaukee",0
+355,"Wichita St",0
+356,"William & Mary",0
+357,"Winthrop",0
+358,"Wisconsin",0
+359,"Wofford",0
+360,"Wright St",0
+361,"Wyoming",0
+362,"Xavier",0
+363,"Yale",0
+364,"Youngstown St",0

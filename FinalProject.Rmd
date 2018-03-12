@@ -1,0 +1,37 @@
+---
+title: "Final Project"
+author: "Alli Ewald, Ashley Holtz, Brenden Doyle, and Nick Smith"
+date: "November 28, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+## R Markdown
+```{r read}
+scores <- read_csv("https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=3&format=1", col_names = c("Time","Date","Team1","Home1","Score1","Team2","Home2","Score2"))
+teams <- read_csv("https://www.masseyratings.com/scores.php?s=292154&sub=11590&all=1&mode=3&format=2", col_names = c("Label", "Team"))
+scores
+teams
+```
+
+```{r tidy}
+scores <- scores %>% select(-Time) %>% 
+  mutate( Date=parse_date(as.character(Date), format("%Y%m%d") ) )
+scores
+```
+
+left_join(scores, teams, c("Team1" = "Lable"))
+```
+
+What needs to be done:
+1. Replace team numbers with team names for Team1 and Team2 columns
+2. xxxx Delete time column 
+3. xxxx  Fix Date column
+4. List words "Home, Away, or Neutral" for Home1 and Home2 Columns
+5. Add a column listing game winner 
+6. Add a Margin Of Victory column
+

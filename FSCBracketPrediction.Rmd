@@ -1,0 +1,279 @@
+---
+title: "FSCBracketPrediction"
+author: "Alli Ewald"
+date: "February 22, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(Matrix)
+```
+
+```{r}
+source("BasketballRanking.R")
+source('MarginPredictionFromCenter.R')
+
+
+
+```
+
+```{r}
+#Atlantic Coast
+#rankedteams %>% filter(State %in% c("MD", "DE", "DC", "NC", "SC", "VA")) %>% select(Team, Index, Rating, Wins, Losses)
+#Great Lakes
+#rankedteams %>% filter(State %in% c("IL", "IN", "KY", "MI")) %>% select(Team, Index, Rating, Wins, Losses)
+#New England
+#rankedteams %>% filter(State %in% c("ME", "MA", "NH", "RI", "VT")) %>% select(Team, Index, Rating, Wins, Losses)
+#South Central
+#rankedteams %>% filter(State %in% c("AR", "CO", "KS", "MO", "OK", "TX", "WY")) %>% filter(`Competition Division`=="Division I") %>% select(Team, Index, Rating, Wins, Losses)
+#Southeast
+#rankedteams %>% filter(State %in% c("AL", "FL", "GA", "LA", "MS", "TN")) %>% filter(`Competition Division`=="Division I")%>% select(Team, Index, Rating, Wins, Losses)
+#rankedteams  %>% filter(`Competition Division`=="Division I")%>% select(Team, Index, Rating, Wins, Losses)
+
+rankedteams <-rankings   %>% 
+#  filter(`Competition Level` == "Club") %>% 
+  mutate(Ranking=min_rank(desc(Rating)))%>%
+  left_join(teams) %>% 
+  rename(Index=Label) %>%
+  #filter(Index %in% indices) %>%
+  arrange( Ranking)# %>% 
+  #arrange( order(indices)) %>%
+  #mutate(Seed = row_number()) %>% 
+  #select(Index, Team, Ranking, Rating, Wins, Losses, )  %>% 
+  #knitr::kable()
+#rankedteams  %>% filter(`Competition Level` == "Club") %>% select(Team, Index, Rating, Wins, Losses) %>% .$Index
+rankedteams
+```
+
+```{r}
+bids <- 1
+indices <- c(1211, 1112, 1199, 1452, 1323, 1268, 1388,
+             1321, 1435, 1433, 1462, 1343, 1137, 1195,
+             1315, 1355, 1242, 1257, 1332, 1345, 1235,
+             1166, 1276, 1274, 1277, 1329, 1348, 1305,
+             1436, 1233, 1240, 1300, 1413, 1314, 1246,
+             1417, 1139, 1278, 1153, 1173, 1116, 1371,
+             1455, 1243, 1448, 1292, 1457, 1245, 1297,
+             1411, 1437, 1181, 1124, 1196, 1438, 1374,
+             1376, 1458, 1439, 1266, 1344, 1425, 1423,
+             1190, 1308, 1407, 1291, 1309
+
+             )
+
+#indices <- c(48,155,,,,,54,,,,,140,181,293,132,,)
+e <- Rating
+#e<-Re(eigen(t(A))$vectors[,1])
+#e<-e/sum(e)*length(e)
+# possibleTeams <-indices[1:bids]
+# cat(possibleTeams, " ")
+# team <-bids+1
+# possible =TRUE
+# while(possible){
+#   if(Predict_Margin(A_unnormed, c(0,shares,1),
+#                     indices[team],possibleTeams[bids], e)>-4 ){
+#     possibleTeams <- indices[1:team]
+#     cat(possibleTeams[team], " ")
+#     team=team+1
+#     if(team > length(indices)){
+#       possible = FALSE
+#     }
+#   } else{
+#     possible = FALSE
+#   }
+# }
+#indices <-sort(indices)
+rankedteams   %>% 
+  
+  mutate(Ranking=min_rank(desc(Rating)))%>%
+  filter(Index %in% indices) #%>%
+#  arrange( Index) %>% 
+ # arrange( order(indices)) %>%
+  #mutate(Seed = row_number()) %>%  
+  #select(Seed, Team, Ranking, Rating, Wins, Losses )  %>% 
+  #knitr::kable()
+
+shares <- c(0,Expecteds, 1)
+```
+```{r}
+
+MOV=diag(rep(0,length(indices)))
+for( i in 1:(length(indices)-1)){
+  for(j in (i+1):length(indices)){
+    MOV[i,j]= Predict_Margin_Meyer(A_unnormed , c(0,Expecteds,1), indices[j], indices[i], e)
+    cat(as.character(teams$Team[indices[i]])," ", as.character(teams$Team[indices[j]]), ":", MOV[i,j], "\n")
+    MOV[j,i]=-MOV[i,j]
+  }
+}
+
+
+```
+
+
+
+
+```{r }
+rankedteams <-rankedteams %>% mutate(Team= str_trim( as.character(Team))) %>% as_tibble()
+rownames(MOV) <-str_trim(as.character(teams$Team[indices]))
+colnames(MOV) <-str_trim(as.character(teams$Team[indices]))
+#print(xtable::xtable(MOV), type="html")
+MOV
+save(MOV, file="FCSTournamentMOV.Rdata")
+
+```
+
+```{r pullBracketInfo}
+library(readxl)
+library(tidyverse)
+
+FootballFCSTournament <- read_excel("FCSTournament.xlsx")
+tourneyTeams<-FootballFCSTournament  %>% select(Team, Region, Spot) %>% right_join(rankedteams %>% filter(Index %in% indices)) %>% filter(!is.na(Region))  %>% mutate(Spot=as.integer(Spot)) %>% arrange(Region, Spot)
+
+tourneyTeams <- tourneyTeams %>% mutate( Round1=rep(1,nrow(tourneyTeams))) 
+
+for(i in 1:length(tourneyTeams$Team)){
+  
+  teams = tourneyTeams %>%
+    filter(Region == Region[i],
+           (Spot-1) %/%2 == (Spot[i]-1) %/%2 ,
+           Team != Team[i]) %>%
+    .$Team
+  
+  tourneyTeams$Round2[i] = 1
+  if(length(teams)>0){
+    for( team in teams){
+      tourneyTeams$Round2[i] = tourneyTeams$Round2[i]*
+        shares[length(shares)/2+1+
+                 MOV[which(rownames(MOV)==team),
+                     which(rownames(MOV)==tourneyTeams$Team[i])]]
+    }
+  }
+}
+
+
+
+
+for(i in 1:length(tourneyTeams$Team)){
+  
+  teams = tourneyTeams %>% 
+    filter(Region == Region[i], 
+           (Spot-1) %/%4 == (Spot[i]-1) %/%4 , 
+           (Spot-1) %/%2 != (Spot[i]-1) %/%2,
+           Team != Team[i]) %>%
+    .$Team
+  
+  tourneyTeams$Quarters[i] = 0
+  for( team in teams){
+    tourneyTeams$Quarters[i] = tourneyTeams$Quarters[i]+
+      shares[length(shares)/2+1+
+               MOV[which(rownames(MOV)==team),
+                   which(rownames(MOV)==tourneyTeams$Team[i])]]*
+      tourneyTeams$Round2[which(tourneyTeams$Team==team)]
+  }
+  tourneyTeams$Quarters[i] = tourneyTeams$Quarters[i]*tourneyTeams$Round2[i]
+}
+
+for(i in 1:length(tourneyTeams$Team)){
+  
+  teams = tourneyTeams %>% 
+    filter(Region == Region[i], 
+           (Spot-1) %/%4 != (Spot[i]-1) %/%4 , 
+           Team != Team[i]) %>%
+    .$Team
+  
+  tourneyTeams$Semis[i] = 0
+  for( team in teams){
+    tourneyTeams$Semis[i] = tourneyTeams$Semis[i]+
+      shares[length(shares)/2+1+
+               MOV[which(rownames(MOV)==team),
+                   which(rownames(MOV)==tourneyTeams$Team[i])]]*
+      tourneyTeams$Quarters[which(tourneyTeams$Team==team)]
+  }
+  tourneyTeams$Semis[i] = tourneyTeams$Semis[i]*tourneyTeams$Quarters[i]
+}
+
+for(i in 1:length(tourneyTeams$Team)){
+  
+  teams = tourneyTeams %>% 
+    filter(Region == if_else(Region[i]=="A","B",
+                             if_else(Region[i]=="B","A",
+                                     if_else(Region[i]=="C", "D", "C")
+                                     ) 
+                             )
+           )%>%
+    .$Team
+  
+  tourneyTeams$Finals[i] = 0
+  for( team in teams){
+    tourneyTeams$Finals[i] = tourneyTeams$Finals[i]+
+      shares[length(shares)/2+1+
+               MOV[which(rownames(MOV)==team),
+                   which(rownames(MOV)==tourneyTeams$Team[i])]]*
+      tourneyTeams$Semis[which(tourneyTeams$Team==team)]
+  }
+  tourneyTeams$Finals[i] = tourneyTeams$Finals[i]*tourneyTeams$Semis[i]
+}
+
+for(i in 1:length(tourneyTeams$Team)){
+  
+  teams = tourneyTeams %>% 
+    filter(Region %in% c(if_else(Region[i] %in% c("A","B"), "C","A"),
+                         if_else(Region[i] %in% c("A","B"), "D","B"))
+                         
+           )%>%
+    .$Team
+  
+  tourneyTeams$Champs[i] = 0
+  for( team in teams){
+    tourneyTeams$Champs[i] = tourneyTeams$Champs[i]+
+      shares[length(shares)/2+1+
+               MOV[which(rownames(MOV)==team),
+                   which(rownames(MOV)==tourneyTeams$Team[i])]]*
+      tourneyTeams$Finals[which(tourneyTeams$Team==team)]
+  }
+  tourneyTeams$Champs[i] = tourneyTeams$Champs[i]*tourneyTeams$Finals[i]
+}
+
+
+
+```
+
+```{r}
+tourneyTeams %>% select(-Region, -Spot, -Index, -Round1) %>% 
+  arrange(desc(Champs)) %>% knitr::kable()
+```
+
+
+
+```{r setupMen}
+library(network)
+library(sna)
+library(ggnetwork)
+n<-network.initialize(length(all_teams), directed = FALSE, multiple = FALSE)
+rankedteams <- rankedteams %>% mutate(ranking = min_rank(desc(Rating)))
+network.vertex.names(n) <- as.character(all_teams)
+n %v% "rank" <- arrange(rankedteams,match( Team, all_teams))$ranking
+n %v% "rating" <- arrange(rankedteams,match( Team, all_teams))$Rating
+#n %v% "conference" <- as.character(all_conferences)
+
+network.adjacency(as.matrix(A_unnormed), n, ignore.eval=FALSE, names.eval = c("WinStrength"))
+
+```
+
+```{r plotField}
+net<-ggnetwork(n %s% which( network.vertex.names(n) %in% tourneyTeams$Team), layout="fruchtermanreingold")
+#net<-ggnetwork(n , layout="fruchtermanreingold")
+ggplot(net, aes(x = x, y = y, xend = xend, yend = yend))+
+  geom_edges(aes(alpha=WinStrength), curvature = 0.2)+
+  geom_nodes(aes(color=rank)  ) +theme_blank()+
+  #geom_nodelabel_repel(aes(label=vertex.names, fill=rank))+
+  scale_color_gradient(low="purple", high="gold")+
+  scale_fill_gradient(low="gold", high="purple")
+
+
+```

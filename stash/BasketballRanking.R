@@ -1,49 +1,61 @@
-library(readr)
-pTD<-0.760
-pFG<-0.240 # ignore safeties and assume all TD=7
-MaxMOV<-39
-
-#Needs to be updated for basketball
+library(dplyr)
+p3<-65581.66667/166216.2778
+p2<-274157.6667/624653
+p1<-(1-p3-p2)
+MaxMOV<-32
 MOVChain<-matrix(rep(0,(2*MaxMOV-1)^2),nrow=2*MaxMOV-1,byrow=TRUE)
-rhs <- c(rep(0,2*MaxMOV-1-7),rep(pTD/2,4),rep(1/2,3))
+rhs <- c(rep(0,2*MaxMOV-1-3),p3/2,(p3+p2)/2,1/2)
 
 for(i in seq(1,(2*MaxMOV-1))){
-  MOVChain[i,i]<-1 
+  MOVChain[i,i]<-1
   if(i+3<=(2*MaxMOV-1)){
-    MOVChain[i,i+3] <- -pFG/2
+    MOVChain[i,i+3] <- -p3/2
   }
   if(i-3>0){
-    MOVChain[i,i-3] <- -pFG/2
+    MOVChain[i,i-3] <- -p3/2
   }
-  if(i+7<=(2*MaxMOV-1)){
-    MOVChain[i,i+7] <- -pTD/2
+  if(i+2<=(2*MaxMOV-1)){
+    MOVChain[i,i+2] <- -p2/2
   }
-  if(i-7>0){
-    MOVChain[i,i-7] <- -pTD/2
+  if(i-2>0){
+    MOVChain[i,i-2] <- -p2/2
+  }
+  if(i+1<=(2*MaxMOV-1)){
+    MOVChain[i,i+1] <- -p1/2
+  }
+  if(i-1>0){
+    MOVChain[i,i-1] <- -p1/2
   }
   
 }
 Expecteds<-solve(MOVChain,rhs)
-#pulling data from Massey Site
+
+
+# #pulling data from Kaggle CSV
 allscores <- read.csv("~/Senior/Ranking Project/Kaggle Data/RegularSeasoncompactResults.csv", header=FALSE)
 teams <- read.csv("~/Senior/Ranking Project/Kaggle Data/TeamCodes.csv", header=TRUE)
 names(allscores)<-c("Year","Day","Team1","Home1","Score1","Team2","Score2","Home2", "OT")
-
-#subset
-scores<-subset(scores, Year > 2016)
-
-
 names(teams)<-c("Label","Team")
+scores<-subset(allscores, Year > 2016)
+
+
+# #pulling data from Massey Ratings Site
+# scores <- read.csv("https://www.masseyratings.com/scores.php?s=298892&sub=11590&all=1&mode=3&format=1", header=FALSE)
+# teams <- read.csv("https://www.masseyratings.com/scores.php?s=298892&sub=11590&all=1&mode=3&format=2", header=TRUE)
+# names(scores)<-c("Year","Day","Team1","Home1","Score1","Team2","Home2","Score2")
+# names(teams)<-c("Label","Team")
+
+
 
 A=matrix(rep(0,length(teams$Team)^2),nrow=length(teams$Team))
 b=rep(1,length(teams$Team))
 
 #max_points=max(c(max( scores$Score1 ),max( scores$Score2 )))
-max_points=100
+#max_points=100
 
 for(i in 1:length(scores$Team1) ){
   
-  if(abs(scores$Score1[i]-scores$Score2[i])<39){
+  if(abs(scores$Score1[i]-scores$Score2[i])<MaxMOV){
     Share1=Expecteds[scores$Score1[i]-scores$Score2[i]+MaxMOV]
   }  else{
     if(scores$Score1[i]>scores$Score2[i]){
@@ -88,6 +100,7 @@ for( n in 1:1000 ){
 }
 
 
+
 #Rating<-rowSums( eigen(t(A))$vectors[,eigen(t(A))$values==1])*64/sum(eigen(t(A))$values==1)
 rankedteams<-data.frame(teams,as.numeric(Rating))
 rankedteams<-rankedteams[ order(Rating,decreasing=TRUE), ]
@@ -98,42 +111,6 @@ write.csv(rankings, paste("FBS MOV RW ", format(Sys.time(),"%Y %m %d"),".csv",se
 A_RW<-A
 
 
-#Use Colley
-A=matrix(rep(0,length(teams$Team)^2),nrow=length(teams$Team))
-b=rep(1,length(teams$Team))
-diag(A)=rep(2,length(diag(A)))
-
-for(i in 1:length(scores$Team1) ){
-  A[ match(scores$Team1[i], teams$Label) ,match(scores$Team2[i], teams$Label)  ]=A[ match(scores$Team1[i], teams$Label) ,match(scores$Team2[i], teams$Label)  ]-1;
-  A[ match(scores$Team2[i], teams$Label) ,match(scores$Team1[i], teams$Label)  ]=A[ match(scores$Team2[i], teams$Label) ,match(scores$Team1[i], teams$Label)  ]-1;
-  A[ match(scores$Team1[i], teams$Label) ,match(scores$Team1[i], teams$Label)  ]=A[ match(scores$Team1[i], teams$Label) ,match(scores$Team1[i], teams$Label)  ]+1;
-  A[ scores$Team2[i] ,scores$Team2[i]  ]=A[ scores$Team2[i] ,scores$Team2[i]  ]+1;
-  
-  if(abs(scores$Score1[i]-scores$Score2[i])<MaxMOV){
-    Share1=Expecteds[scores$Score1[i]-scores$Score2[i]+MaxMOV]
-  }  else{
-    if(scores$Score1[i]>scores$Score2[i]){
-      Share1=1
-    } else{
-      Share1=0
-    }
-  }
-  
-  
-  Share2=-Share1
-  
-  
-  if(abs(match(scores$Score1[i],teams$Label)-match(scores$Score2[i], teams$Label))
-     b[ scores$Team1[i] ]=b[ scores$Team1[i] ]- Share2
-     b[ scores$Team2[i] ]=b[ scores$Team2[i] ]- Share1
-}
-
-Rating=solve(A,b)
 
 
-rankedteams<-cbind(teams,as.numeric(Rating))
-rankedteams<-rankedteams[ order(Rating,decreasing=TRUE), ]
-rankings<-cbind(seq(1,length(rankedteams$Team)),rankedteams[2:3])
-names(rankings)<-c("Ranking",names(rankings)[2],"Rating")
-row.names(rankings)<-seq(nrow(rankings))
-write.csv(rankings, paste("FBS MOV Colley ", format(Sys.time(),"%Y %m %d"),".csv",sep=""), row.names = FALSE)
+
