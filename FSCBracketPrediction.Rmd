@@ -53,19 +53,19 @@ rankedteams
 
 ```{r}
 bids <- 1
-indices <- c(1211, 1112, 1199, 1452, 1323, 1268, 1388,
-             1321, 1435, 1433, 1462, 1343, 1137, 1195,
-             1315, 1355, 1242, 1257, 1332, 1345, 1235,
-             1166, 1276, 1274, 1277, 1329, 1348, 1305,
-             1436, 1233, 1240, 1300, 1413, 1314, 1246,
-             1417, 1139, 1278, 1153, 1173, 1116, 1371,
-             1455, 1243, 1448, 1292, 1457, 1245, 1297,
-             1411, 1437, 1181, 1124, 1196, 1438, 1374,
-             1376, 1458, 1439, 1266, 1344, 1425, 1423,
-             1190, 1308, 1407, 1291, 1309
+indices <- c(1242, 1181, 1277, 1120, 1155, 1395, 1348, 1371, 
+             1301, 1328, 1113, 1393, 1308, 1158, 1137, 1233, 
+             1335, 1437 ,1345, 1403, 1455, 1452, 1196, 1116,
+             1439, 1104, 1139, 1382, 1417, 1293, 1267, 1372,
+             1168, 1254, 1347, 1462, 1314, 1276, 1211, 1326, 
+             1222, 1401, 1281, 1199, 1344, 1361, 1355, 1422, 
+             1285, 1252, 1300, 1411, 1438, 1153, 1397, 1112, 
+             1246, 1274, 1305, 1166, 1243, 1400, 1260, 1172, 
+             1138, 1460, 1209, 1420
+
 
              )
-
+indices <-sort(indices)
 #indices <- c(48,155,,,,,54,,,,,140,181,293,132,,)
 e <- Rating
 #e<-Re(eigen(t(A))$vectors[,1])
@@ -118,12 +118,38 @@ for( i in 1:(length(match(indices, teams$Label))-1)){
 
 
 ```{r }
-rankedteams <-rankedteams %>% mutate(Team= str_trim( as.character(Team))) %>% as_tibble()
-rownames(MOV) <-str_trim(as.character(teams$Team[indices]))
-colnames(MOV) <-str_trim(as.character(teams$Team[indices]))
+require(stringr)
+rownames(MOV) <-str_trim(as.character(teams$Team[match(indices, teams$Label)]))
+colnames(MOV) <-str_trim(as.character(teams$Team[match(indices, teams$Label)]))
 #print(xtable::xtable(MOV), type="html")
 MOV
 save(MOV, file="FCSTournamentMOV.Rdata")
+
+
+```
+
+```{r prob}
+
+MOVp=matrix(Expecteds[MaxMOV+MOV], nrow=68, byrow=FALSE)
+#vector<-c(k)
+prob<-rep(0.5, 2278)
+GameID = rep(" ", 2278)
+
+game=1
+
+for(i in 1:(length(indices)-1)){
+  for(j in (i+1):length(indices)){
+    GameID[game] = paste("2018", indices[i], indices[j], sep='_')
+    prob[game] = MOVp[i,j]
+    game=game+1
+  }
+}
+  
+forKaggle <- data.frame(GameID, prob) 
+write_csv(forKaggle, "KaggleSubmit.csv")
+# Prob = MOV[i,j]
+   #  }
+ # }
 
 ```
 

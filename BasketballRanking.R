@@ -32,11 +32,11 @@ Expecteds<-solve(MOVChain,rhs)
 
 
 # #pulling data from Kaggle CSV
-allscores <- read.csv("~/Senior/Ranking Project/Kaggle Data/RegularSeasoncompactResults.csv", header=FALSE)
+allscores <- read.csv("~/Senior/Ranking Project/Kaggle Data/RegularSeasonCompactResults2018Prelim.csv", header=FALSE)
 teams <- read.csv("~/Senior/Ranking Project/Kaggle Data/TeamCodes.csv", header=TRUE)
 names(allscores)<-c("Year","Day","Team1","Home1","Score1","Team2","Score2","Home2", "OT")
 names(teams)<-c("Label","Team")
-scores<-subset(allscores, Year > 2016)
+scores<-subset(allscores, Year == 2015)
 
 
 # #pulling data from Massey Ratings Site
@@ -48,7 +48,7 @@ scores<-subset(allscores, Year > 2016)
 
 
 A=matrix(rep(0,length(teams$Team)^2),nrow=length(teams$Team))
-b=rep(1,length(teams$Team))
+
 
 #max_points=max(c(max( scores$Score1 ),max( scores$Score2 )))
 #max_points=100
@@ -76,14 +76,18 @@ for(i in 1:length(scores$Team1) ){
     print(c(i,Share1,Share2))
   }
 }
-image(A)
+#image(A)
+teams <- teams %>% filter(colSums(A)!=0)
+A<-A[colSums(A)>0, colSums(A)>0]
+b=rep(1,length(teams$Team))
 library(igraph)
 row.names(A) <- teams$Team;
 colnames(A) <- teams$Team;
-game_graph <-graph_from_adjacency_matrix(A, mode = "directed", weighted = TRUE, diag = FALSE)
+#game_graph <-graph_from_adjacency_matrix(A, mode = "directed", weighted = TRUE, diag = FALSE)
 
 A_unnormed <- A
-
+ 
+ 
 for(i in 1:length(teams$Team)){
   if(sum(A[i,])!=0){ 
     A[i,]=A[i,]/sum(A[i,])
