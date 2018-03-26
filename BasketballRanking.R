@@ -36,8 +36,8 @@ allscores <- read.csv("~/Senior/Ranking Project/Kaggle Data/RegularSeasonCompact
 teams <- read.csv("~/Senior/Ranking Project/Kaggle Data/TeamCodes.csv", header=TRUE)
 names(allscores)<-c("Year","Day","Team1","Home1","Score1","Team2","Score2","Home2", "OT")
 names(teams)<-c("Label","Team")
-scores<-subset(allscores, Year == 2015)
-
+score<-subset(allscores, Year < 2018)
+scores<-subset(score, Year > 2016)
 
 # #pulling data from Massey Ratings Site
 # scores <- read.csv("https://www.masseyratings.com/scores.php?s=298892&sub=11590&all=1&mode=3&format=1", header=FALSE)
